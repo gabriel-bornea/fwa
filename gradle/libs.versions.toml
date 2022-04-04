@@ -1,0 +1,16 @@
+[versions]
+arrow_version = "1.0.1"
+kotest_version = "5.2.2"
+kotest_extensions_version = "1.2.4"
+
+[libraries]
+arrow = { module = "io.arrow-kt:arrow-fx-coroutines", version.ref = "arrow_version" }
+
+kotestRunnerJunit = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest_version" }
+kotestAssertionsCore = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest_version" }
+kotestAssertionsArrow = { module = "io.kotest.extensions:kotest-assertions-arrow", version.ref = "kotest_extensions_version" }
+kotestProperty = { module = "io.kotest:kotest-property", version.ref = "kotest_version" }
+kotestDatatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest_version" }
+
+[bundles]
+kotest = ["kotestRunnerJunit", "kotestAssertionsCore", "kotestProperty", "kotestDatatest", "kotestAssertionsArrow"]
