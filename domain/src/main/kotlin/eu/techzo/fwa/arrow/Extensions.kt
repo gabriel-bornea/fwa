@@ -1,14 +1,8 @@
 package eu.techzo.fwa.arrow
 
-import arrow.core.Either
 import arrow.core.ValidatedNel
-import arrow.core.flatMap
-import arrow.core.rightIfNull
 import arrow.core.zip
 import arrow.typeclasses.Semigroup
-
-inline fun <E, B> Either<E, B?>.leftIfNotNull(f: () -> E): Either<E, Nothing?> =
-  flatMap { it.rightIfNull { f() } }
 
 fun <E, A, B> zipMany(
   f: ValidatedNel<E, A>,

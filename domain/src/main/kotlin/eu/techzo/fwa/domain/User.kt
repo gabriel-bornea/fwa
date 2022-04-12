@@ -4,7 +4,6 @@ import arrow.core.Either
 import arrow.core.NonEmptyList
 import arrow.core.ValidatedNel
 import arrow.core.computations.either
-import eu.techzo.fwa.arrow.leftIfNotNull
 import eu.techzo.fwa.arrow.zipMany
 import eu.techzo.fwa.config.PasswordEncoder
 import eu.techzo.fwa.domain.Email.Companion.validate
@@ -26,17 +25,19 @@ fun interface StoreUser { suspend fun store(user: User): Either<Failure, UserId>
 
 context(QueryUserByUsername)
 internal suspend fun exists(username: Username): ValidatedNel<Failure, Username> =
-  query(username)
-    .leftIfNotNull { UsernameAlreadyInUseFailure(username) }
-    .map { username }
-    .toValidatedNel()
+  either<Failure, Username> {
+    val user = query(username).bind()
+    ensure(user == null) { UsernameAlreadyInUseFailure(username) }
+    username
+  }.toValidatedNel()
 
 context(QueryUserByEmail)
 internal suspend fun exists(email: Email): ValidatedNel<Failure, Email> =
-  query(email)
-    .leftIfNotNull { EmailAlreadyInUseFailure(email) }
-    .map { email }
-    .toValidatedNel()
+  either<Failure, Email> {
+    val user = query(email).bind()
+    ensure(user == null) { EmailAlreadyInUseFailure(email) }
+    email
+  }.toValidatedNel()
 
 context(QueryUserByUsername, QueryUserByEmail, StoreUser, PasswordEncoder)
 suspend fun register(

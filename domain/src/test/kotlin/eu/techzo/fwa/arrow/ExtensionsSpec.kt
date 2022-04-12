@@ -1,25 +1,16 @@
 package eu.techzo.fwa.arrow
 
-import arrow.core.Either.Left
-import arrow.core.Either.Right
 import arrow.core.NonEmptyList
 import arrow.core.invalidNel
 import arrow.core.valid
 import io.kotest.assertions.arrow.core.shouldBeInvalid
 import io.kotest.assertions.arrow.core.shouldBeValid
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.int
 import io.kotest.property.checkAll
 
 class ExtensionsSpec : FreeSpec({
-  "leftIfNotNull should return Left if Right value is not null and Right if Right value is null" {
-    checkAll(Arb.int(), Arb.int()) { a: Int, b: Int ->
-      Right(a).leftIfNotNull { b } shouldBe Left(b)
-      Right(null).leftIfNotNull { b } shouldBe Right(null)
-    }
-  }
 
   "zipMany2 should return a Pair if both evaluations are Valid" {
     checkAll(Arb.int(), Arb.int()) { a: Int, b: Int ->
