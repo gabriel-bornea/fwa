@@ -1,7 +1,7 @@
 [versions]
-arrow_version = "1.0.1"
-kotest_version = "5.2.2"
-kotest_extensions_version = "1.2.4"
+arrow_version = "1.1.2"
+kotest_version = "5.4.2"
+kotest_extensions_version = "1.2.5"
 
 [libraries]
 arrow = { module = "io.arrow-kt:arrow-fx-coroutines", version.ref = "arrow_version" }

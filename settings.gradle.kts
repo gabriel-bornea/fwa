@@ -1,4 +1,4 @@
 rootProject.name = "fwa"
 
-include("domain")
+include("core")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

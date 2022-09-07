@@ -1,7 +1,6 @@
 package eu.techzo.fwa.user
 
 import eu.techzo.fwa.domain.Email
-import eu.techzo.fwa.domain.Email.Companion.validate
 import io.kotest.assertions.arrow.core.shouldBeInvalid
 import io.kotest.assertions.arrow.core.shouldBeValid
 import io.kotest.core.spec.style.FunSpec
@@ -20,7 +19,7 @@ class EmailSpec : FunSpec({
       "john@yahoo.com.",
       "@yahoo.com"
     ) { value ->
-      Email(value).validate().shouldBeInvalid()
+      Email.from(value).shouldBeInvalid()
     }
   }
 
@@ -31,7 +30,7 @@ class EmailSpec : FunSpec({
       "john.doe@yahoo.com",
       "john@techzo.eu"
     ) { value ->
-      Email(value).validate().shouldBeValid()
+      Email.from(value).shouldBeValid()
     }
   }
 })

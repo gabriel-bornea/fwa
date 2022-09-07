@@ -1,8 +1,11 @@
 package eu.techzo.fwa.user
 
 import arrow.core.Either.Right
+import arrow.core.Nel
+import arrow.core.continuations.either
 import eu.techzo.fwa.config.PasswordEncoder
 import eu.techzo.fwa.domain.Email
+import eu.techzo.fwa.domain.Failure
 import eu.techzo.fwa.domain.Password
 import eu.techzo.fwa.domain.QueryUserByEmail
 import eu.techzo.fwa.domain.QueryUserByUsername
@@ -26,7 +29,7 @@ class UserRegistrationSpec : FreeSpec({
       { Right(it) }
     )
 
-    with(ctx) { register(username, email, password) }.shouldBeRight(userId)
+    with(ctx) { register(USERNAME, EMAIL, PASSWORD) }.shouldBeRight(userId)
   }
 
   "should accumulate errors if input values are not valid" {
@@ -37,7 +40,7 @@ class UserRegistrationSpec : FreeSpec({
       { Right(it) }
     )
 
-    with(ctx) { register(Username("u1"), Email("@gmail.com"), Password("123")) }
+    with(ctx) { register("u1", "@gmail.com", "123") }
       .should { result ->
         result.mapLeft { failures -> failures.size shouldBe 3 }
       }
@@ -51,7 +54,7 @@ class UserRegistrationSpec : FreeSpec({
       { Right(it) }
     )
 
-    with(ctx) { register(username, email, password) }
+    with(ctx) { register(USERNAME, EMAIL, PASSWORD) }
       .should { result ->
         result.mapLeft { failures -> failures.size shouldBe 2 }
       }
@@ -59,11 +62,13 @@ class UserRegistrationSpec : FreeSpec({
 })
 
 private val userId = UserId()
-private val username = Username("username_1")
-private val email = Email("username_1@gmail.com")
-private val password = Password("Change1t!")
+private const val USERNAME = "username_1"
+private const val EMAIL = "username_1@gmail.com"
+private const val PASSWORD = "Change1t!"
 
-private val user = User(userId, username, email, password)
+private val user = either.eager<Nel<Failure>, User> {
+  User(userId, Username.from(USERNAME).bind(), Email.from(EMAIL).bind(), Password.from(PASSWORD).bind())
+}.orNull()
 
 private class RegistrationContext(
   qubu: QueryUserByUsername,
